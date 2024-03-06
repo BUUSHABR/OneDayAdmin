@@ -6,13 +6,22 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
+    screens: {
+      xxs:'250px',
+      xs: '350px',  // Added for extra-small screens below 350px
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1310px',
+      '2xl': '1536px',
+    },    
     extend: {
       colors: {
-        secondary: '#FC9D0D',
-        primary: '#FFB701',
-        subsidary: '#FFD466',
-        dblack: '2A2927',
-        bgrey: "#9F9F9F",
+        "secondary": '#FC9D0D',
+        "primary": '#FFB701',
+        "subsidary": '#FFD466',
+        "dblack": '2A2927',
+        "bgrey": "#9F9F9F",
         'int-black': '#000000',
         'int-light-blue': '#ECEFF0',
         'int-grey-100': '#151B26',
@@ -29,6 +38,8 @@ module.exports = {
         'int-dark': '#333333',
         'int-background': '#FAFAFA',
         'int-red': '#EB5757',
+        'int-success':"#46f202",
+        'int-danger':"#e3210b"
 
       },
       fontSize:{
@@ -46,6 +57,8 @@ module.exports = {
         'poppins-semi-bold': ['PoppinsSemiBold', 'sans-serif'],
         'poppins-italic': ['PoppinsItalic', 'sans-serif'],
         'poppins-italic-bold': ['PoppinsItalicBold', 'sans-serif'],
+        "LuxuriousScript": ['"LuxuriousScript-Regular"', 'cursive'],
+
       },
       boxShadow: {
         card: '0px 20px 44px #C9D3D7, 0px 1px 2px rgba(0, 0, 0, 0.15)',
