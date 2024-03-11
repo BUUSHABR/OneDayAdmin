@@ -4,6 +4,7 @@ import Input from '../../components/Input';
 import { useFormik } from 'formik';
 import { LoginRequest } from '../../service/UserService';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export default function Login() {
     const navigation=useNavigate();
@@ -19,9 +20,13 @@ export default function Login() {
             localStorage.setItem("USERKEY",Response?.data?.token);
             let Data=JSON.stringify(Response?.data)
             localStorage.setItem("USERINFO",Data);
+            toast.success("Successfully Logged In")
             navigation("/menu")
 
+        }else{
+            toast.error("Login Failed")
         }
+
     };
 
     const validate = (values) => {
