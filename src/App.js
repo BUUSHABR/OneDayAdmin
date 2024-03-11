@@ -4,6 +4,7 @@ import './App.css';
 import { useRoutes } from 'react-router-dom';
 import routes from './routes';
 import { useEffect } from 'react';
+import ToastProvider from './utils/ToastProvider';
 
 
 function App() {
@@ -14,10 +15,11 @@ function App() {
   }, []);
 
   return (
-   
+    <ToastProvider>
     <div className="  h-[100%] w-[100%] bg-black">
       {element}
     </div>
+    </ToastProvider>
   );
 }
 

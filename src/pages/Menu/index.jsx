@@ -6,16 +6,22 @@ import Dish from "../../assets/icons/main-dish.png";
 import Cuisine from "../../assets/icons/cuisine.png";
 import { useNavigate, useNavigation } from 'react-router-dom';
 import { PrimaryButton } from '../../components/Button';
+import { toast } from 'react-toastify';
+
 function Menu() {
     const { data, isLoading, isError } = useMenu();
     const navigation=useNavigate();
 const EditMenu=(item)=>{
 console.log(item);
 navigation(`/editmenu/${item._id}`, { state: { data: item } })
-}   
+} 
+
+const handleToast=()=>{
+    toast.error('Operation successful!');
+}
  return (
         <div className=" w-full relative  ">
-            <div className='cursor-pointer flex justify-center items-center w-full pt-5 '>
+            <div className='cursor-pointer flex justify-center items-center w-full pt-5 ' onClick={()=>handleToast()}>
                 <OnedayIcon className='w-40 h-40 ' />
                 <div className='text-[60px] text-primary font-LuxuriousScript '>
                     Menu
@@ -33,7 +39,7 @@ navigation(`/editmenu/${item._id}`, { state: { data: item } })
                                <div key={index} className='h-80 group py-4 px-8 flex flex-col justify-center items-center cursor-pointer' onClick={()=>EditMenu(item)}>
                                <div className='w-28 h-28 rounded-full my-[2%]'>
                                    <img
-                                       src={item?.item_url ? "http://localhost:3002/uploads/" + item.item_url : OneDay}
+                                       src={item?.item_url ?  item.item_url : OneDay}
                                        className='object-cover w-full h-full rounded-full border group-hover:shadow-lg group-hover:shadow-primary'
                                        alt={`Item ${index}`}
                                    />

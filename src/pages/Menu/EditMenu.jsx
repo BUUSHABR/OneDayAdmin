@@ -1,11 +1,13 @@
 import { useLocation, useNavigate, } from "react-router-dom"
-import OneDay from '../../assets/images/Cheese-Burger.png';
+import OneDay from '../../assets/icons/OneDayBlack.svg';
 import { useFormik } from "formik";
 import Input from "../../components/Input";
 import { PrimaryButton } from "../../components/Button";
 import { useState } from "react";
 import { UploadImage } from "../../service/UploadImage";
 import { PatchMenu, RemoveMenu } from "../../service/MenuService";
+import { toast } from "react-toastify";
+import * as Yup from 'yup';
 
 export default function EditMenu() {
     const location = useLocation();
@@ -45,20 +47,33 @@ export default function EditMenu() {
         item_url: data.item_url,
         active:data?.active
     };
+    const validationSchema = Yup.object().shape({
+        item_name: Yup.string().required('Item name is required'),
+        category: Yup.string().required('Category is required'),
+        cuisine: Yup.string().required('Cuisine is required'),
+        item_description: Yup.string(),
+        food_taste: Yup.string().max(50, 'Food taste must be at most 50 characters'),
+        food_fact: Yup.string(),
+        price: Yup.number().required('Price is required').positive('Price must be a positive number'),
+      });
+
 
     const onSubmit = async (values) => {
         if (selectedFile) {
             const Upload = await UploadImage(selectedFile).then(res=>{
-                console.log(res);
-                values.item_url=res.filename;
+                values.item_url=res.imageUrl;
         }).catch(err=>{
             console.log("Err",err);
         })
             
         }
         const EditReq=await PatchMenu(values,data._id);
+        console.log("EditReq",EditReq,values)
         if(EditReq){
+            toast.success("Successfuly Saved the Changes")
             navigation("/menu");
+        }else{
+            toast.error("Error While Updating")
         }
         console.log("EditReq",EditReq)
         console.log("val", values);
@@ -69,17 +84,22 @@ export default function EditMenu() {
     const DeleteMenu=async()=>{
         const DeleteReq=await RemoveMenu(data._id);
         if(DeleteReq){
+            toast.success("Successfuly Deleted")
             navigation("/menu");
+        }
+        else{
+            toast.error("Delete Failed!")
         }
     }
     const formik = useFormik({
         initialValues,
         onSubmit,
-        //validate, // Add the validate function
+        validationSchema
     });
 
     return (
         <div className="bg-black h-full flex flex-col items-center text-primary  py-20">
+            <div className="lg:text-[60px] md:text-[30px] sm:text-[20px] xs:text-[20px] text-primary font-LuxuriousScript">{data && data.item_name}</div>
             <div className="my-4 cursor-pointer" onMouseEnter={() => setShowOverlay(true)} onMouseLeave={() => setShowOverlay(false)}>
                 {showOverlay && (
                     <div className="absolute flex justify-center items-end bg-int-red bg-opacity-50 p-4 w-40 h-40 rounded">
@@ -95,7 +115,7 @@ export default function EditMenu() {
                         />
                     </div>
                 )}
-                <img src={selectedFile ? previewUrl : data?.item_url?'http://localhost:3002/uploads/'+data?.item_url: OneDay} className="w-40 h-40 rounded hover:shadow-sm hover:shadow-primary rounded p-2" />
+                <img src={selectedFile ? previewUrl : data?.item_url?data?.item_url: OneDay} className="w-40 h-40 rounded hover:shadow-sm hover:shadow-primary rounded p-2" />
             </div>
             {data && <form onSubmit={formik.handleSubmit} className="max-w-[80%] min-w-[80%] " >
                 <div className=" grid grid-cols-1  xxs:grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-4 gap-y-8 px-5">
@@ -108,6 +128,8 @@ export default function EditMenu() {
                         field={formik.getFieldProps('item_name')}
                         className="w-full "
                         text="[100%]"
+                        error={formik.errors.item_name}
+                        errorMessage={formik.errors.item_name}
                     />
                     <Input
                         label="Category"
@@ -118,6 +140,8 @@ export default function EditMenu() {
                         field={formik.getFieldProps('category')}
                         className="w-full h-10"
                         text="[100%]"
+                        error={formik.errors.category}
+                        errorMessage={formik.errors.category}
                     />
 
                     <Input
@@ -129,6 +153,8 @@ export default function EditMenu() {
                         field={formik.getFieldProps('cuisine')}
                         className="w-full h-10"
                         text="[100%]"
+                        error={formik.errors.cuisine}
+                        errorMessage={formik.errors.cuisine}
                     />
                     <Input
                         label="Description"
@@ -139,6 +165,9 @@ export default function EditMenu() {
                         field={formik.getFieldProps('item_description')}
                         className="w-full h-10"
                         text="[100%]"
+                        error={formik.errors.item_description}
+                        errorMessage={formik.errors.item_description}
+                        
                     />
                     <Input
                         label="Food Fact"
@@ -149,6 +178,8 @@ export default function EditMenu() {
                         field={formik.getFieldProps('food_fact')}
                         className="w-full h-10 mb-2 "
                         text="[100%]"
+                        error={formik.errors.food_fact}
+                        errorMessage={formik.errors.food_fact}
                     />
                     <Input
                         label="Food Taste"
@@ -160,6 +191,8 @@ export default function EditMenu() {
                         field={formik.getFieldProps('food_taste')}
                         className="w-full h-10"
                         text="[100%]"
+                        error={formik.errors.food_taste}
+                    errorMessage={formik.errors.food_taste}
                     />
                     <Input
                         label="Price"
@@ -171,6 +204,8 @@ export default function EditMenu() {
                         field={formik.getFieldProps('price')}
                         className="w-full h-10"
                         text="[100%]"
+                        error={formik.errors.price}
+                        errorMessage={formik.errors.price}
                     />
                     <div className="text-white flex flex-col">
                         <div className="text-primary">Food Type</div>
@@ -219,7 +254,7 @@ export default function EditMenu() {
                 </div>
                 <div className="flex   justify-center items-center  my-5 gap-x-4 ">
                     <PrimaryButton  red type="button" onClick={()=>DeleteMenu()}>Delete</PrimaryButton>
-                    <PrimaryButton type="submit" disabled={!formik.isValid}>Save</PrimaryButton>
+                    <PrimaryButton type="submit" dark  >Save</PrimaryButton>
                 </div>
             </form>}
 

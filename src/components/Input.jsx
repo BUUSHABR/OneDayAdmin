@@ -30,7 +30,7 @@ function Input(props) {
     return classnames('absolute', 'left-2', 'transition-all', 'transform', 'cursor-auto','bg-black', 'pointer-events-none', {
       'text-int-red': props.error,
       'top-1/2': !focused,
-      'text-[50%]': !focused && !props.field.value,
+      'text-[20px]': !focused && !props.field.value,
       'text-[30%]': focused && !props.text,
       'text-[50%]': focused && props.text,
       '-translate-y-1/3': !focused && !props.field.value,

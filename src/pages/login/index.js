@@ -19,7 +19,7 @@ export default function Login() {
             localStorage.setItem("USERKEY",Response?.data?.token);
             let Data=JSON.stringify(Response?.data)
             localStorage.setItem("USERINFO",Data);
-            navigation("menu")
+            navigation("/menu")
 
         }
     };
@@ -47,10 +47,10 @@ export default function Login() {
     });
 
     return (
-        <div className="text-white text-[40px] flex flex-col justify-center items-center">
+        <div className=" h-screen text-white text-[40px] flex flex-col justify-center items-center">
             <OnedayIcon className='w-25 h-25 align-center' />
             <div className='w-full flex justify-center items-center mt-20'>
-                <div className='w-[30%] border shadow-lg shadow-primary p-5 rounded'>
+                <div className='lg:w-[30%] xl:w-[30%] md:w-[40%] sm:w-[60%] xs:w-[70%] border shadow-lg shadow-primary p-5 rounded'>
                     <form onSubmit={formik.handleSubmit}>
                         <Input
                             label="Email"
@@ -62,6 +62,7 @@ export default function Login() {
                             errorMessage={formik.errors.email}
                             className=""
                             field={formik.getFieldProps('email')}
+                            
                         />
                         <Input
                             label="Password"
